@@ -9,15 +9,6 @@
 # Hina Suzuki
 
 
-# In[5]:
-
-
-# remember this is just a template,
-# you don't need to follow every step.
-# If you have your own method to solve the homework,
-# it is totally fine
-
-
 # In[6]:
 
 
@@ -57,7 +48,6 @@ class CenterOfMass:
         # store the mass, positions, velocities of only the particles of the given type
         # the following only gives the example of storing the mass
         self.m = self.data['m'][self.index]
-        # write your own code to complete this for positions and velocities
         self.x = self.data['x'][self.index] 
         self.y = self.data['y'][self.index] 
         self.z = self.data['x'][self.index] 
@@ -88,9 +78,7 @@ class CenterOfMass:
         c_com : `float`
             third component on the COM vector
         '''
-        # write your own code to compute the generic COM 
-        #using Eq. 1 in the homework instructions   com = sum (xm)/ sum(m)
-        
+       
         # xcomponent Center of mass
         a_com = np.sum(a*m) / np.sum(m)
         # ycomponent Center of mass
@@ -98,7 +86,6 @@ class CenterOfMass:
         # zcomponent Center of mass
         c_com = np.sum(c*m) / np.sum(m)
         
-        # return the 3 components separately
         return a_com, b_com, c_com
     
     def COM_P(self, delta):
@@ -122,8 +109,7 @@ class CenterOfMass:
         # Try a first guess at the COM position by calling COMdefine                                                   
         x_COM, y_COM, z_COM = self.COMdefine(self.x, self.y, self.z, self.m)
         # compute the magnitude of the COM position vector.
-        # write your own code below
-        r_COM = np.sqrt(x_COM**2 + y_COM**2 + x_COM**2)
+        r_COM = np.sqrt(x_COM**2 + y_COM**2 + z_COM**2)
 
 
         # iterative process to determine the center of mass                                                            
@@ -131,11 +117,10 @@ class CenterOfMass:
         # change reference frame to COM frame                                                                          
         # compute the difference between particle coordinates                                                          
         # and the first guess at COM position
-        # write your own code below
         x_new = self.x - x_COM
         y_new = self.y - y_COM
         z_new = self.z - z_COM
-        r_new = np.sqrt(x_new**2 + y_new**2 + x_new**2)
+        r_new = np.sqrt(x_new**2 + y_new**2 + z_new**2)
 
 
         # find the max 3D distance of all particles from the guessed COM                                               
@@ -152,7 +137,6 @@ class CenterOfMass:
         
         while (change > delta):
             # select all particles within the reduced radius (starting from original x,y,z, m)
-            # write your own code below (hints, use np.where)
             index2 = np.where(r_max > r_new)
             x2 = self.x[index2]
             y2 = self.y[index2]
@@ -162,18 +146,14 @@ class CenterOfMass:
             # Refined COM position:                                                                                    
             # compute the center of mass position using                                                                
             # the particles in the reduced radius
-            # write your own code below
             x_COM2, y_COM2, z_COM2 = self.COMdefine(x2, y2, z2, m2)
             # compute the new 3D COM position
-            # write your own code below
             r_COM2 = np.sqrt(x_COM2**2 + y_COM2**2 + z_COM2**2 )
 
             # determine the difference between the previous center of mass position                                    
             # and the new one.                                                                                         
             change = np.abs(r_COM - r_COM2)
-            # uncomment the following line if you want to check this                                                                                               
-            # print ("CHANGE = ", change)                                                                                     
-
+           
             # Before loop continues, reset : r_max, particle separations and COM                                        
 
             # reduce the volume by a factor of 2 again                                                                 
@@ -183,11 +163,10 @@ class CenterOfMass:
 
             # Change the frame of reference to the newly computed COM.                                                 
             # subtract the new COM
-            # write your own code below
             x_new = self.x - x_COM2
             y_new = self.y - y_COM2
             z_new = self.z - z_COM2
-            r_new = np.sqrt(x_new**2 + y_new**2 + x_new**2)
+            r_new = np.sqrt(x_new**2 + y_new**2 + z_new**2)
 
             # set the center of mass positions to the refined values                                                   
             x_COM = x_COM2
@@ -201,7 +180,6 @@ class CenterOfMass:
        
         # set the correct units using astropy and round all values
         # and then return the COM positon vector
-        # write your own code below
         p_COM = np.round([x_COM, y_COM, z_COM], 2) 
         return p_COM*u.kpc
 
@@ -231,36 +209,28 @@ class CenterOfMass:
         rv_max = 15.0*u.kpc
 
         # determine the position of all particles relative to the center of mass position (x_COM, y_COM, z_COM)
-        # write your own code below
         xV = self.x *u.kpc - x_COM
         yV = self.y *u.kpc - y_COM
         zV = self.z *u.kpc - z_COM
         rV = np.sqrt(xV**2 + yV**2 + zV**2)
         
         # determine the index for those particles within the max radius
-        # write your own code below
         indexV = np.where(rV < rv_max)
         
         # determine the velocity and mass of those particles within the mas radius
-        # write your own code below
-        # Note that x_COM, y_COM, z_COM are astropy quantities and you can only subtract one astropy quantity from another
-        # So, when determining the relative positions, assign the appropriate units to self.x
         vx_new = self.vx[indexV]
         vy_new = self.vy[indexV]
         vz_new = self.vz[indexV]
         m_new =  self.m[indexV]
         
         # compute the center of mass velocity using those particles
-        # write your own code below
         vx_COM, vy_COM, vz_COM = self.COMdefine(vx_new, vy_new, vz_new, m_new)
         
-        # create an array to store the COM velocity
-        # write your own code below
+        # create an array to store the COM velocity round number into 2 decimal places
         v_COM = np.round([vx_COM, vy_COM, vz_COM], 2)
 
         # return the COM vector
         # set the correct units usint astropy
-        # round all values                                    
         return v_COM * u.km/u.s
      
     
