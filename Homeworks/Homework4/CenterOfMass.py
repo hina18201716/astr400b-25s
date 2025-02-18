@@ -50,7 +50,7 @@ class CenterOfMass:
         self.m = self.data['m'][self.index]
         self.x = self.data['x'][self.index] 
         self.y = self.data['y'][self.index] 
-        self.z = self.data['x'][self.index] 
+        self.z = self.data['z'][self.index] 
         self.vx = self.data['vx'][self.index] 
         self.vy = self.data['vy'][self.index]
         self.vz = self.data['vz'][self.index] 
