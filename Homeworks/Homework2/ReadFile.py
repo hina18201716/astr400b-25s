@@ -24,6 +24,8 @@ def Read(filename):
             Coordinate is layed s.t. origin in at the Galactic Center. 
         Input: filename
         Output: Time(Myr)
+                n, number of particles 
+                data. type, position and velocity of each particle
     """
     # open file 
     file = open(filename, 'r')
