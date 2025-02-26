@@ -62,7 +62,7 @@ def OrbitCOM(galaxy, start, end, n):
     for  i, snap_id in enumerate(snap_ids):
         
         # compose the data filename (be careful about the folder)
-        ilbl = '000' + str(i)
+        ilbl = '000' + str(snap_id)
         # remove all but the last 3 digits
         ilbl = ilbl[-3:]
         filename="%s_"%(galaxy) + ilbl + '.txt'
