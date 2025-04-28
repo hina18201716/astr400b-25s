@@ -62,7 +62,6 @@ class MergerRemnant:
     
         self.filename ="Remnant_" + ilbl + '.txt'
 
-    #     change to calculate time 
         time = Snap * 10 / 0.7 # time in Myr
         n_particles = len(self.remnants)
 
@@ -214,7 +213,7 @@ class MergerRemnant:
         
         return self.r2, self.v2, self.rho, self.vphi
 
-    def Vmax_over_sigma(self, v_max, r_cutoff):
+    def Vmax_over_sigma(self, r_cutoff, v_max=100):
         """
         Compute v_max / sigma for all particles within R_target.
         σ is computed as the standard deviation of azimuthal velocities.
@@ -232,13 +231,13 @@ class MergerRemnant:
             Ratio of v_max to velocity dispersion sigma
         """
         
-#       create variance opject with size of r2 
-        # sigma= np.zeros(np.size(self.r2))
+        
+        sigma = np.zeros(len(self.r2))
         
 #       loop though distance and calculate sigma value with particles with in given radial distance 
-        # for i in self.r2:
-        index = np.where(self.rho < r_cutoff) # walking out in radial bins
-        sigma = np.std(np.abs(self.vphi[index]))
-
+        for i in self.r2:  
+            index = np.where((self.rho > i) & (self.rho < i +1)) # walking out in radial bins
+            sigma[i] = np.std(self.vphi[index])
+            
         return v_max / sigma
 
